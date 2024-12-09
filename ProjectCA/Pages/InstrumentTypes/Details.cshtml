@@ -1,0 +1,29 @@
+﻿@page
+@model ProjectCA.Pages.InstrumentTypes.DetailsModel
+@{
+    ViewData["Title"] = "Instrument Type Details";
+}
+
+<h1>Instrument Type Details</h1>
+
+<div>
+    <h2>Instrument Type: @Model.InstrumentType.Type</h2>
+
+    @if (Model.InstrumentType.EquipmentItems.Any())
+    {
+        <p><strong>Equipment Items:</strong></p>
+        <ul>
+            @foreach (var equipment in Model.InstrumentType.EquipmentItems)
+            {
+                <li>
+                    <strong>Catalog Number:</strong> @equipment.CatNumber <br />
+                    <strong>Status:</strong> @equipment.Status <br />
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No equipment items found for this Instrument Type.</p>
+    }
+</div>

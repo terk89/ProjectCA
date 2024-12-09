@@ -1,0 +1,52 @@
+﻿@page
+@model ProjectCA.Pages.Instruments.IndexModel
+@{
+}
+
+<h1>Instruments</h1>
+
+<!-- Links for Managing Data -->
+<a asp-page="Create" class="btn btn-secondary">Add New Equipment</a>
+<a asp-page="/Manufacturers/Index" class="btn btn-secondary">Manage Manufacturers</a>
+<a asp-page="/InstrumentTypes/Index" class="btn btn-secondary">Manage Instrument Types</a>
+<a asp-page="Search" class="btn btn-secondary">Search</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-route-sortOrder="@Model.UserSort">Owner</a>
+            </th>
+            <th>
+                <a asp-route-sortOrder="@Model.TypeSort">Type</a>
+            </th>
+            <th>
+                <a asp-route-sortOrder="@Model.CatNumberSort">Cat Number</a>
+            </th>
+            <th>
+                <a asp-route-sortOrder="@Model.CalibrationDueSort">Calibration Due</a>
+            </th>
+            <th>
+                <a asp-route-sortOrder="@Model.StatusSort">@Html.DisplayNameFor(model => model.EquipmentItem[0].Status)</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.EquipmentItem)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.InstrumentType.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.CatNumber)</td>
+                <td>@item.CalibrationDue.ToString("yyyy-MM-dd")</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.EquipmentID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.EquipmentID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.EquipmentID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table></table>

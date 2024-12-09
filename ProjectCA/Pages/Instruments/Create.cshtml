@@ -1,0 +1,63 @@
+﻿@page
+@model ProjectCA.Pages.Instruments.CreateModel
+@{
+}
+
+<h2>Add Equipment</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="EquipmentItem_CatNumber">Cat Number</label>
+        <input type="text" class="form-control" id="EquipmentItem_CatNumber" name="EquipmentItem.CatNumber" , placeholder="Enter CAT Number" />
+    </div>
+
+    <div class="form-group">
+        <label for="EquipmentItem_SerialNumber">Serial Number</label>
+        <input type="text" class="form-control" id="EquipmentItem_SerialNumber" name="EquipmentItem.SerialNumber" , placeholder="Enter Serial Number" />
+    </div>
+
+    <div class="form-group">
+        <label for="EquipmentItem_CalibrationDue">Calibration Due</label>
+        <input type="date" class="form-control" id="EquipmentItem_CalibrationDue" name="EquipmentItem.CalibrationDue" , placeholder="Select Next Calibration Date" />
+    </div>
+
+    <div class="form-group">
+        <label for="EquipmentItem_Status">Status</label>
+        @Html.DropDownListFor(
+        model => model.EquipmentItem.Status,
+        (SelectList)ViewData["Status"], "--- Select Status ---",
+        new { @class = "form-control", id = "EquipmentItem_Status" })
+    </div>
+
+    <div class="form-group">
+        <label for="EquipmentItem_Id">User</label>
+        @Html.DropDownListFor(
+        model => model.EquipmentItem.UserID,
+        new SelectList(ViewData["Id"] as IEnumerable<SelectListItem>, "Value", "Text"),
+        "--- Select User ---",
+        new { @class = "form-control", id = "EquipmentItem_Id" })
+    </div>
+
+    <div class="form-group">
+        <label for="EquipmentItem_InstrumentTypeID">Instrument Type</label>
+        @Html.DropDownListFor(
+        model => model.EquipmentItem.InstrumentTypeID,
+        (SelectList)ViewData["InstrumentTypeID"],
+        "--- Select Instrument Type ---",
+        new { @class = "form-control", id = "EquipmentItem_InstrumentTypeID" })
+    </div>
+
+    <div class="form-group">
+        <label for="EquipmentItem_ManufacturerID">Manufacturer</label>
+        @Html.DropDownListFor(
+        model => model.EquipmentItem.ManufacturerID,
+        (SelectList)ViewData["ManufacturerID"],
+        "--- Select a Manufacturer ---",
+        new { @class = "form-control", id = "EquipmentItem_ManufacturerID" })
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+<a href="@Url.Page("./Index")" class="btn btn-secondary">Cancel</a>

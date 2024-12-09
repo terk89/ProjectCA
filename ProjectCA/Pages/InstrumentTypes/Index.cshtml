@@ -1,0 +1,45 @@
+﻿@page
+@model ProjectCA.Pages.InstrumentTypes.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New Type</a>
+</p>
+<p> <a asp-page="../Instruments/Index">Back to List</a></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Type
+            </th>
+            <th>
+                Calibration Interval
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.InstrumentType)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)  <!-- Display Type of Instrument -->
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CalibrationInterval)  <!-- Display Calibration Interval -->
+                </td>
+                <td>
+                    <!-- Links to Edit, Details, Delete for the InstrumentType -->
+                    <a asp-page="./Edit" asp-route-id="@item.InstrumentTypeID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.InstrumentTypeID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.InstrumentTypeID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

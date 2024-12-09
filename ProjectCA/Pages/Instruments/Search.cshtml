@@ -1,0 +1,58 @@
+﻿@page
+@model ProjectCA.Pages.Instruments.SearchModel
+
+@{
+    ViewData["Title"] = "Search Items";
+}
+
+<h2>Search Items</h2>
+
+<form method="get">
+    <!-- Text Input for Search Query -->
+    <div class="form-group">
+        <label for="SearchQuery">Search</label>
+        <input type="text" class="form-control" id="SearchQuery" name="searchQuery" value="@Model.SearchQuery" placeholder="Enter search term" />
+    </div>
+
+    <!-- Dropdown for Search Field -->
+    <div class="form-group">
+        <label for="SearchField">Search By</label>
+        @Html.DropDownList("searchField", Model.SearchFields, new { @class = "form-control", id = "SearchField" })
+    </div>
+
+    <!-- Search Button -->
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<!-- Display the Search Results -->
+<h3>Search Results</h3>
+
+<!-- Only show the table if there are results -->
+@if (Model.EquipmentItems.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cat Number</th>
+                <th>Serial Number</th>
+                <th>Manufacturer</th>
+                <th>Instrument Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.EquipmentItems)
+            {
+                <tr>
+                    <td>@item.CatNumber</td>
+                    <td>@item.SerialNumber</td>
+                    <td>@item.Manufacturer.Name</td>
+                    <td>@item.InstrumentType.Type</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No results found.</p>
+}

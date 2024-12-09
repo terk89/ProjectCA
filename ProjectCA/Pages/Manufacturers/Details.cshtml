@@ -1,0 +1,36 @@
+﻿@page
+@model ProjectCA.Pages.Manufacturers.DetailsModel
+@{
+    ViewData["Title"] = "Manufacturer Details";
+}
+
+<h2>@Model.Manufacturer.Name</h2>
+
+<<div>
+    <h2>Manufacturer: @Model.Manufacturer.Name</h2>
+
+    @if (Model.Manufacturer.EquipmentItems.Any())
+    {
+        <p><strong>Equipment Items:</strong></p>
+        <ul>
+            @foreach (var equipment in Model.Manufacturer.EquipmentItems)
+            {
+                <li>
+                    <strong>Catalog Number:</strong> @equipment.CatNumber <br />
+                    <strong>Serial Number:</strong> @equipment.SerialNumber <br />
+                    <strong>Status:</strong> @equipment.Status <br />
+                    <strong>Instrument Type:</strong> @equipment.InstrumentType?.Type
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No equipment items found for this manufacturer.</p>
+    }
+</div>
+
+
+<a asp-page="./Edit" class="btn btn-secondary" asp-route-id="@Model.Manufacturer?.ManufacturerID">Edit</a>
+<a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>
