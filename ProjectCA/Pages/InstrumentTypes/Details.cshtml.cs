@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,10 +7,13 @@ using ProjectCA.Services;
 
 namespace ProjectCA.Pages.InstrumentTypes
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
+        // Injecting the ApplicationDbContext to interact with the database.
         private readonly ApplicationDbContext _context;
 
+        //injecting dbContext into DetailsModel
         public DetailsModel(ApplicationDbContext context)
         {
             _context = context;

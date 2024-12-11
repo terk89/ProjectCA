@@ -33,57 +33,61 @@
             CAT Number:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EquipmentItem.CatNumber)
+            @Html.DisplayFor(model => model.EquipmentItem.CatNumber) <!-- Displaying the Catalog Number-->
         </dd>
         <dt class="col-sm-2">
             Calibration Due:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EquipmentItem.CalibrationDue)
+            @Model.EquipmentItem.CalibrationDue.ToString("dd-MM-yyyy") <!-- Display the Calibration Due date in yyyy-MM-dd format -->
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EquipmentItem.SerialNumber)
+            Serial Number
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EquipmentItem.SerialNumber)
+            @Html.DisplayFor(model => model.EquipmentItem.SerialNumber)<!-- Displaying the Serial Number-->
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EquipmentItem.Status)
+            Status
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EquipmentItem.Status)
+            @Html.DisplayFor(model => model.EquipmentItem.Status)<!-- Displaying the Equipment Status-->
         </dd>
     </dl>
 </div>
 <div class="container">
     <h3>Calibration Records for @Model.EquipmentItem.CatNumber</h3>
 
-    <!-- Existing Calibration Records Table -->
+    <!-- Existing Calibration Records Table Header -->
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Calibration Date</th>
                 <th>Performed By</th>
                 <th>Certificate</th>
-                @if (User.IsInRole("Admin"))
+                <!-- Action menu displayed for admin users only -->
+                @if (User.IsInRole("admin"))
                 {
-                    <th>Actions</th> <!-- Optional column for Admin actions -->
+                    <th>Actions</th>
                 }
             </tr>
         </thead>
+        <!-- Existing Calibration Records Table Body -->
         <tbody>
+            <!-- display calibration records if present -->
             @if (Model.CalibrationRecords != null && Model.CalibrationRecords.Any())
             {
                 foreach (var record in Model.CalibrationRecords)
                 {
                     <tr>
-                        <td>@record.CalibrationDate.ToString("yyyy-MM-dd")</td>
+                        <td>@record.CalibrationDate.ToString("dd-MM-yyyy")</td>
                         <td>@record.User?.FullName</td>
                         <td>
                             <a asp-page="./Details" asp-route-id="@record.CalibrationRecordID" asp-page-handler="DownloadCalibrationCertificate">
                                 Download PDF
                             </a>
                         </td>
+                        <!-- Delete option available only for admin -->
                         @if (User.IsInRole("admin"))
                         {
                             <td>
@@ -94,7 +98,7 @@
                         }
                     </tr>
                 }
-            }
+            }@*If no calibrations available display message*@
             else
             {
                 <tr>
@@ -104,38 +108,55 @@
         </tbody>
     </table>
 
+    <!-- Adding new calibration record -->
     <h4>Add New Calibration Record</h4>
-<form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="CalibrationDate">Calibration Date</label>
-        <input type="date" class="form-control" id="CalibrationDate" asp-for="NewCalibrationRecord.CalibrationDate" />
-        <span asp-validation-for="NewCalibrationRecord.CalibrationDate" class="text-danger"></span>
+    <form method="post" enctype="multipart/form-data">
+
+        <!-- Select Calibration Date -->
+        <div class="form-group">
+            <label for="CalibrationDate">Calibration Date</label>
+            <!-- Date input field, defaulting to the current date -->
+            <input type="date" class="form-control" id="CalibrationDate"
+                   asp-for="NewCalibrationRecord.CalibrationDate"
+                   value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <!-- Display validation error for CalibrationDate -->
+            <span asp-validation-for="NewCalibrationRecord.CalibrationDate" class="text-danger"></span>
+        </div>
+
+        <!-- Select Technician performing calibration -->
+	    <div class="form-group">
+		    <label for="UserID">Performed By</label>
+            <!-- Dropdown to select the user (technician) who performed the calibration -->
+		    <select asp-for="NewCalibrationRecord.UserID" class="form-control">
+                <!-- Default option for no selection -->
+			    <option value="">--- Select User ---</option>
+                    <!-- Populate options dynamically from the ViewData containing user list -->
+				    @foreach (var user in ViewData["Users"] as List<SelectListItem>)
+				    {
+                        <!-- Render each user as an option with their ID as value and name as text -->
+                        <!-- Mark the option as selected if it matches the current model's UserID -->
+					    <option value="@user.Value" selected="@(user.Value == Model.NewCalibrationRecord.UserID ? "selected" : null)">
+						    @user.Text
+					    </option>
+				    }
+		    </select>
+            <!-- Display validation error for UserID -->
+		    <span asp-validation-for="NewCalibrationRecord.UserID" class="text-danger"></span>
+	    </div>
+
+        <!-- Upload Calibration Certificate -->
+	    <div class="form-group">
+		    <label for="CalibrationCert">Upload Calibration Certificate (PDF)</label>
+            <!-- File input for uploading a PDF calibration certificate -->
+		    <input type="file" class="form-control" id="CalibrationCert" asp-for="NewCalibrationRecord.CalibrationCert" accept=".pdf" />
+            <!-- Display validation error for CalibrationCert -->
+		    <span asp-validation-for="NewCalibrationRecord.CalibrationCert" class="text-danger"></span>
+	    </div>
+
+	    <button type="submit" class="btn btn-primary">Add Calibration Record</button>
+    </form>
+
+    <div>
+	    <a asp-page="./Edit" asp-route-id="@Model.EquipmentItem?.EquipmentID">Edit</a> |
+	    <a asp-page="./Index">Back to List</a>
     </div>
-
-    <div class="form-group">
-        <label for="UserID">Performed By</label>
-        <select asp-for="NewCalibrationRecord.UserID" class="form-control">
-            <option value="">--- Select User ---</option>
-                @foreach (var user in ViewData["Users"] as List<SelectListItem>)
-                {
-                    <option value="@user.Value" selected="@(user.Value == Model.NewCalibrationRecord.UserID ? "selected" : null)">
-                        @user.Text
-                    </option>
-                }
-        </select>
-        <span asp-validation-for="NewCalibrationRecord.UserID" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label for="CalibrationCert">Upload Calibration Certificate (PDF)</label>
-        <input type="file" class="form-control" id="CalibrationCert" asp-for="NewCalibrationRecord.CalibrationCert" accept=".pdf" />
-        <span asp-validation-for="NewCalibrationRecord.CalibrationCert" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add Calibration Record</button>
-</form>
-
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.EquipmentItem?.EquipmentID">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>

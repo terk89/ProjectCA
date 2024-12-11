@@ -8,12 +8,14 @@ using System.Data;
 
 namespace ProjectCA.Pages.InstrumentTypes
 {   
+    // Available only for administrator
     [Authorize(Roles = "admin")]
     public class DeleteModel : PageModel
     {
-        
+        // Injecting the ApplicationDbContext to interact with the database.
         private readonly ApplicationDbContext _context;
 
+        //injecting dbContext into DeleteModel
         public DeleteModel(ApplicationDbContext context)
         {
             _context = context;
@@ -22,7 +24,7 @@ namespace ProjectCA.Pages.InstrumentTypes
         [BindProperty]
         public InstrumentType InstrumentType { get; set; } = default!;
 
-
+        // GET InstrumentType
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null || _context.InstrumentTypes == null)
@@ -42,7 +44,7 @@ namespace ProjectCA.Pages.InstrumentTypes
             }
             return Page();
         }
-
+        // POST Delete Instrument Type if InstrumentType present in Database
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null || _context.InstrumentTypes == null)

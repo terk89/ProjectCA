@@ -32,11 +32,12 @@
             <th></th>
         </tr>
     </thead>
+    @*Displaying all available instruments*@
     <tbody>
         @foreach (var item in Model.EquipmentItem)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.User.UserName)</td>
+                <td>@Html.DisplayFor(modelItem => item.User.FullName)</td>
                 <td>@Html.DisplayFor(modelItem => item.InstrumentType.Type)</td>
                 <td>@Html.DisplayFor(modelItem => item.CatNumber)</td>
                 <td>@item.CalibrationDue.ToString("yyyy-MM-dd")</td>

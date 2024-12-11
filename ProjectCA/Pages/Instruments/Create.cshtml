@@ -2,25 +2,26 @@
 @model ProjectCA.Pages.Instruments.CreateModel
 @{
 }
-
+@*Creating a new EquipmentItem*@
 <h2>Add Equipment</h2>
 
+@*Adding Catalog Number*@
 <form method="post">
     <div class="form-group">
         <label for="EquipmentItem_CatNumber">Cat Number</label>
         <input type="text" class="form-control" id="EquipmentItem_CatNumber" name="EquipmentItem.CatNumber" , placeholder="Enter CAT Number" />
     </div>
-
+@*Adding Serial Number*@
     <div class="form-group">
         <label for="EquipmentItem_SerialNumber">Serial Number</label>
         <input type="text" class="form-control" id="EquipmentItem_SerialNumber" name="EquipmentItem.SerialNumber" , placeholder="Enter Serial Number" />
     </div>
-
+@*When is the calibration due? *@
     <div class="form-group">
         <label for="EquipmentItem_CalibrationDue">Calibration Due</label>
         <input type="date" class="form-control" id="EquipmentItem_CalibrationDue" name="EquipmentItem.CalibrationDue" , placeholder="Select Next Calibration Date" />
     </div>
-
+@*Selecting equipment's status (in service, awaiting calibration, lost. damages)*@
     <div class="form-group">
         <label for="EquipmentItem_Status">Status</label>
         @Html.DropDownListFor(
@@ -28,7 +29,7 @@
         (SelectList)ViewData["Status"], "--- Select Status ---",
         new { @class = "form-control", id = "EquipmentItem_Status" })
     </div>
-
+@*Owner's ID*@
     <div class="form-group">
         <label for="EquipmentItem_Id">User</label>
         @Html.DropDownListFor(
@@ -37,7 +38,7 @@
         "--- Select User ---",
         new { @class = "form-control", id = "EquipmentItem_Id" })
     </div>
-
+@*Selecting type of instrument*@
     <div class="form-group">
         <label for="EquipmentItem_InstrumentTypeID">Instrument Type</label>
         @Html.DropDownListFor(
@@ -46,7 +47,7 @@
         "--- Select Instrument Type ---",
         new { @class = "form-control", id = "EquipmentItem_InstrumentTypeID" })
     </div>
-
+@*Selecting Manufacturer's ID*@
     <div class="form-group">
         <label for="EquipmentItem_ManufacturerID">Manufacturer</label>
         @Html.DropDownListFor(

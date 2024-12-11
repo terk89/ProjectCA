@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,10 +8,13 @@ using ProjectCA.Services;
 
 namespace ProjectCA.Pages.Instruments
 {
+    [Authorize]
     public class SearchModel : PageModel
     {
+        // Injecting the ApplicationDbContext to interact with the database.
         private readonly ApplicationDbContext _context;
 
+        //injecting dbContext into SearchModel
         public SearchModel(ApplicationDbContext context)
         {
             _context = context;
@@ -26,7 +30,7 @@ namespace ProjectCA.Pages.Instruments
         // Dropdown list for search fields
         public SelectList SearchFields { get; set; }
 
-        // OnGetAsync to initialize the dropdowns and filter the equipment items based on search parameters
+        // Dropdowns initialization and filter the equipment items based on search parameters
         public async Task OnGetAsync(string searchQuery, string searchField)
         {
             // Initialize dropdown for search fields (All, CatNumber, InstrumentType, Manufacturer)

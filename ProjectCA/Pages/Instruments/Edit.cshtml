@@ -6,22 +6,23 @@
 
 <h2>Edit Equipment</h2>
 
+<!-- Edit Catalog Number -->
 <form method="post">
     <div class="form-group">
         <label for="EquipmentItem_CatNumber">Cat Number</label>
         <input type="text" class="form-control" id="EquipmentItem_CatNumber" name="EquipmentItem.CatNumber" value="@Model.EquipmentItem.CatNumber" />
     </div>
-
+    <!-- Edit Serial Number -->
     <div class="form-group">
         <label for="EquipmentItem_SerialNumber">Serial Number</label>
         <input type="text" class="form-control" id="EquipmentItem_SerialNumber" name="EquipmentItem.SerialNumber" value="@Model.EquipmentItem.SerialNumber" />
     </div>
-
+    <!-- Edit calibration Due date -->
     <div class="form-group">
         <label for="EquipmentItem_CalibrationDue">Calibration Due</label>
         <input type="date" class="form-control" id="EquipmentItem_CalibrationDue" name="EquipmentItem.CalibrationDue" value="@Model.EquipmentItem.CalibrationDue.ToString("yyyy-MM-dd")" />
     </div>
-
+    <!-- Edit Equipment status -->
     <div class="form-group">
         <label for="EquipmentItem_Status">Status</label>
         @Html.DropDownListFor(
@@ -29,15 +30,15 @@
         (SelectList)ViewData["Status"],
         new { @class = "form-control", id = "EquipmentItem_Status" })
     </div>
-
+    <!-- Edit Owner-->
     <div class="form-group">
-        <label for="EquipmentItem_UserID">User</label>
+        <label for="EquipmentItem_UserID">Owner</label>
         @Html.DropDownListFor(
         model => model.EquipmentItem.UserID,
         (SelectList)ViewData["UserID"],
         new { @class = "form-control", id = "EquipmentItem_UserID" })
     </div>
-
+    <!-- Edit Instrument Type -->
     <div class="form-group">
         <label for="EquipmentItem_InstrumentTypeID">Instrument Type</label>
         @Html.DropDownListFor(
@@ -45,7 +46,7 @@
         (SelectList)ViewData["InstrumentTypeID"],
         new { @class = "form-control", id = "EquipmentItem_InstrumentTypeID" })
     </div>
-
+    <!-- Edit Manufacturer -->
     <div class="form-group">
         <label for="EquipmentItem_ManufacturerID">Manufacturer</label>
         @Html.DropDownListFor(
@@ -58,4 +59,4 @@
 </form>
 
 <a href="@Url.Page("./Index")" class="btn btn-secondary">Cancel</a>
-}
+

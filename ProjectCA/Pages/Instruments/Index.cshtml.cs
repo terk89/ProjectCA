@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,10 +7,13 @@ using ProjectCA.Services;
 
 namespace ProjectCA.Pages.Instruments
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
+        // Injecting the ApplicationDbContext to interact with the database.
         private readonly ApplicationDbContext _context;
 
+        //injecting dbContext into IndexModel
         public IndexModel(ApplicationDbContext context)
         {
             _context = context;
@@ -26,9 +30,10 @@ namespace ProjectCA.Pages.Instruments
         public string CalibrationDueSort { get; set; }
         public string StatusSort { get; set; }
 
+        // This method is called when the page is accessed via GET request.
         public async Task OnGetAsync(string sortOrder)
         {
-            // Set sorting parameters
+            // Set sorting parameters, default UserDesc
             UserSort = string.IsNullOrEmpty(sortOrder) ? "user_desc" : "";
             TypeSort = sortOrder == "type" ? "type_desc" : "type";
             CatNumberSort = sortOrder == "catnumber" ? "catnumber_desc" : "catnumber";
@@ -38,11 +43,13 @@ namespace ProjectCA.Pages.Instruments
             // Remember current sort order
             CurrentSort = sortOrder;
 
-            // Fetch and sort EquipmentItems
+            // creating query to fetch EquipmentItems from the database
             IQueryable<EquipmentItem> equipmentQuery = _context.EquipmentItems
                 .Include(e => e.User)
                 .Include(e => e.InstrumentType);
 
+
+            // Apply sorting logic based on the value of sortOrder
             switch (sortOrder)
             {
                 case "user_desc":
@@ -77,7 +84,8 @@ namespace ProjectCA.Pages.Instruments
                     break;
             }
 
-            // Execute query
+            // Execute the query and store the result in the EquipmentItem list
+            // AsNoTracking is used to optimize performance for read-only operations (i.e., no need to track changes to these entities)
             EquipmentItem = await equipmentQuery.AsNoTracking().ToListAsync();
         }
     }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,15 +8,19 @@ using ProjectCA.Services;
 
 namespace ProjectCA.Pages.Instruments
 {
+    [Authorize]
     public class EditModel : PageModel
     {
+        //reading the database 
         private readonly ApplicationDbContext _context;
 
+        //injecting dbContext into EditModel
         public EditModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        // binding property to handle form input
         [BindProperty]
         public EquipmentItem EquipmentItem { get; set; } = default!;
 

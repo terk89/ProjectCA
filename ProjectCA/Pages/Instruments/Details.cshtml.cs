@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,23 +11,26 @@ using System.Text;
 
 namespace ProjectCA.Pages.Instruments
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _environment;
 
+        // accessing database and IWebHostEnvironment
         public DetailsModel(IWebHostEnvironment environment, ApplicationDbContext context)
         {
             _environment = environment;
             _context = context;
         }
-
+        // properties
         public EquipmentItem EquipmentItem { get; set; } = default!;
         public List<CalibrationRecord> CalibrationRecords { get; set; }
 
         [BindProperty]
         public CalibrationRecordDto NewCalibrationRecord { get; set; } = new CalibrationRecordDto();
 
+        // Handling GET requests for the Details page.
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null || _context.EquipmentItems == null)
@@ -62,43 +66,39 @@ namespace ProjectCA.Pages.Instruments
             return Page();
         }
 
-
+        // handling POST request for new Calibration Record
         public async Task<IActionResult> OnPostAsync(int id)
         {
+            // Check if the model is valid and if the calibration certificate is provided
             if (!ModelState.IsValid || NewCalibrationRecord.CalibrationCert == null)
             {
                 ModelState.AddModelError("CalibrationCert", "Calibration certificate is required.");
                 return await OnGetAsync(id);
             }
 
-            // File Handling
-            string uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadsFolder))
+            // File Handling - Get file data as byte array
+            using (var memoryStream = new MemoryStream())
             {
-                Directory.CreateDirectory(uploadsFolder);
+                await NewCalibrationRecord.CalibrationCert.CopyToAsync(memoryStream); // Copy the file content to memory stream
+                var fileBytes = memoryStream.ToArray(); // Convert memory stream to byte array
+
+                // Create a new CalibrationRecord object to store the calibration data
+                var calibrationRecord = new CalibrationRecord
+                {
+                    CalibrationDate = NewCalibrationRecord.CalibrationDate,
+                    UserID = NewCalibrationRecord.UserID,
+                    EquipmentID = id,
+                    CalibrationCert = fileBytes // Save the byte array of the file content
+                };
+
+                // Add the new CalibrationRecord to the database
+                _context.CalibrationRecords.Add(calibrationRecord);
+                await _context.SaveChangesAsync();
             }
-
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(NewCalibrationRecord.CalibrationCert.FileName);
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await NewCalibrationRecord.CalibrationCert.CopyToAsync(fileStream);
-            }
-
-            var calibrationRecord = new CalibrationRecord
-            {
-                CalibrationDate = NewCalibrationRecord.CalibrationDate,
-                UserID = NewCalibrationRecord.UserID,
-                EquipmentID = id,
-                CalibrationCert = Encoding.UTF8.GetBytes(filePath) // Save the file path in the database
-            };
-
-            _context.CalibrationRecords.Add(calibrationRecord);
-            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Details", new { id = id });
         }
+
 
         public async Task<IActionResult> OnGetDownloadCalibrationCertificateAsync(int id)
         {

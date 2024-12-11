@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,8 @@ using ProjectCA.Services;
 
 namespace ProjectCA.Pages.Manufacturers
 {
-    
-        public class IndexModel : PageModel
+    [Authorize]
+    public class IndexModel : PageModel
         {
             private readonly ApplicationDbContext _context;
 
