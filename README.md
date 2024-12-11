@@ -45,10 +45,10 @@ role Id (AspNetRoles).
 - Technician - can view and add new instruments and calibration records but cannot delete or modify records created by others. This is the default user type associated with new users.
 
 ## Equipment Items
-In order to add EquipmentItem (Admin only) the following items need to be added in advance:
+- In order to add EquipmentItem (Admin only) the following items need to be added in advance:
 - Manufacturer (Admin)
 - InstrumentType(Admin)
-Once Added, Technician is able to add a new CalibrationRecord and edit basic EquipmentItem informations.
+- Once Added, Technician is able to add a new CalibrationRecord and edit basic EquipmentItem informations.
 
 ## Technologies Used
 - ASP.NET Core 6.0 (Razor Pages)
