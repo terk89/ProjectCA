@@ -23,7 +23,7 @@ Key features:
 ## Prerequisites
 To run this project, you'll need the following tools installed:
 
-- .NET SDK 6.0 or higher: [Install .NET SDK](https://dotnet.microsoft.com/download/dotnet)
+- .NET SDK 6.0
 - SQL Server (or any other relational database of your choice if you modify the application)
 - Visual Studio 2022 or VS Code (or any IDE that supports .NET development)
 
